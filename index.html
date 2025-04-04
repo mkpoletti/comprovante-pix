@@ -6,48 +6,106 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #fff;
-      color: #333;
-      padding: 20px;
+      background-color: #ffffff;
+      color: #333333;
+      margin: 0;
+      padding: 30px 20px;
       max-width: 500px;
       margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .check {
+
+    .logo {
+      max-width: 180px;
+      margin-bottom: 20px;
+    }
+
+    .aprovado {
       color: #008000;
       font-weight: bold;
-      font-size: 24px;
+      font-size: 20px;
       display: flex;
       align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
     }
-    .check::before {
-      content: "✔️";
-      margin-right: 8px;
+
+    .linha {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
     }
+
     hr {
       border: none;
-      border-top: 1px solid #ccc;
+      border-top: 1px solid #cccccc;
       margin: 20px 0;
     }
-    .linha {
-      margin-bottom: 10px;
-    }
-    strong {
-      display: inline-block;
-      width: 180px;
+
+    .titulo {
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <img src="logo.png" alt="Logo" style="max-width: 200px;"><br><br>
+  <img src="logo.png" alt="Logo" class="logo">
 
-  <div class="check">Pagamento aprovado</div>
+  <div class="aprovado">
+    ✔️ Pagamento aprovado
+  </div>
 
   <hr>
 
-  <div class="linha"><strong>Data de pagamento:</strong> <span id="data"></span> às <span id="hora"></span></div>
-  <div class="linha"><strong>Valor do pagamento:</strong> R$ 4.600,00</div>
-  <div class="linha"><strong>Pagador:</strong> CredFácil</div>
-  <div class="linha"><strong>Beneficiário:</strong> <span id="beneficiario"></span></div>
-  <div class="linha"><strong>CPF:</strong> <span id="cpf"></span></div>
-  <div class="linha"><strong>Código de pagamento:</strong> <span id
+  <div class="linha">
+    <span class="titulo">Data de pagamento:</span> 
+    <span id="dataHora"></span>
+  </div>
+
+  <div class="linha">
+    <span class="titulo">Valor do pagamento:</span>
+    <span>R$ 4.600,00</span>
+  </div>
+
+  <div class="linha">
+    <span class="titulo">Pagador:</span>
+    <span>CredFácil</span>
+  </div>
+
+  <div class="linha">
+    <span class="titulo">Beneficiário:</span>
+    <span id="beneficiario"></span>
+  </div>
+
+  <div class="linha">
+    <span class="titulo">CPF:</span>
+    <span id="cpf"></span>
+  </div>
+
+  <div class="linha">
+    <span class="titulo">Código de pagamento:</span>
+    <span id="codigo"></span>
+  </div>
+
+  <div class="linha">
+    <span class="titulo">Autenticação:</span>
+    <span id="autenticacao"></span>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const pad = (n) => String(n).padStart(2, '0');
+    const now = new Date();
+    const dataHora = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+    document.getElementById('dataHora').textContent = dataHora;
+    document.getElementById('beneficiario').textContent = params.get('beneficiario') || '---';
+    document.getElementById('cpf').textContent = params.get('cpf') || '---';
+    document.getElementById('codigo').textContent = Math.floor(100000000 + Math.random() * 900000000);
+    document.getElementById('autenticacao').textContent = Math.random().toString(36).substring(2, 14).toUpperCase();
+  </script>
+
+</body>
+</html>
