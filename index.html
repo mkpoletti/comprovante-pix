@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,69 +9,113 @@
       font-family: Arial, sans-serif;
       background: #ffffff;
       color: #333333;
-      padding: 24px;
+      padding: 20px;
       max-width: 500px;
       margin: auto;
+      border: 1px solid #ddd;
+      border-radius: 10px;
     }
     .logo {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
     .logo img {
-      max-height: 50px;
+      width: 120px;
     }
-    .aprovado {
+    .success {
       color: #008000;
-      text-align: center;
       font-size: 20px;
-      margin-bottom: 16px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
     }
-    hr {
-      border: none;
+    .divider {
       border-top: 1px solid #ccc;
-      margin: 16px 0;
+      margin: 20px 0;
     }
-    .campo {
-      margin-bottom: 12px;
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
     }
     .label {
       font-weight: bold;
+    }
+    .value {
+      text-align: right;
+    }
+    .code {
+      font-size: 14px;
+      color: #555;
+      word-break: break-all;
     }
   </style>
 </head>
 <body>
   <div class="logo">
-    <img src="https://i.ibb.co/m58VWctZ/dsdsad.png" alt="Logo">
+    <img src="https://i.ibb.co/m58VWctZ/dsdsad.png" alt="Logo CredFácil">
   </div>
-  <div class="aprovado">✔ Pagamento Aprovado</div>
-  <hr>
+  <div class="success">✔ Pagamento Aprovado</div>
 
-  <div class="campo"><span class="label">Data de pagamento:</span> <span id="data"></span> às <span id="hora"></span></div>
-  <div class="campo"><span class="label">Valor:</span> R$ 4.600,00</div>
-  <div class="campo"><span class="label">Pagador:</span> CredFácil</div>
-  <div class="campo"><span class="label">Beneficiário:</span> <span id="beneficiario"></span></div>
-  <div class="campo"><span class="label">CPF:</span> <span id="cpf"></span></div>
-  <div class="campo"><span class="label">Código de pagamento:</span> <span id="codigo"></span></div>
-  <div class="campo"><span class="label">Autenticação:</span> <span id="autenticacao"></span></div>
+  <div class="divider"></div>
+
+  <div class="row">
+    <div class="label">Data do Pagamento:</div>
+    <div class="value" id="data"></div>
+  </div>
+  <div class="row">
+    <div class="label">Valor do Pagamento:</div>
+    <div class="value">R$ 4.600,00</div>
+  </div>
+  <div class="row">
+    <div class="label">Pagador:</div>
+    <div class="value">CredFácil</div>
+  </div>
+  <div class="row">
+    <div class="label">Beneficiário:</div>
+    <div class="value" id="beneficiario">---</div>
+  </div>
+  <div class="row">
+    <div class="label">CPF:</div>
+    <div class="value" id="cpf">---</div>
+  </div>
+  <div class="row">
+    <div class="label">Código de Pagamento:</div>
+    <div class="value code" id="codigo"></div>
+  </div>
+  <div class="row">
+    <div class="label">Autenticação:</div>
+    <div class="value code" id="autenticacao"></div>
+  </div>
 
   <script>
-    // Função para pegar parâmetros da URL
-    function getParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param) || '';
+    // Puxa os parâmetros da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const beneficiario = urlParams.get("beneficiario");
+    const cpf = urlParams.get("cpf");
+
+    // Preenche os campos
+    if (beneficiario) document.getElementById("beneficiario").innerText = beneficiario;
+    if (cpf) document.getElementById("cpf").innerText = cpf;
+
+    // Data e hora atual
+    const now = new Date();
+    const dataFormatada = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+    document.getElementById("data").innerText = dataFormatada;
+
+    // Gerar código de pagamento e autenticação aleatórios
+    function gerarHash(tamanho) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let resultado = "";
+      for (let i = 0; i < tamanho; i++) {
+        resultado += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return resultado;
     }
 
-    // Preencher os campos
-    document.getElementById('pagador').textContent = getParam('pagador');
-    document.getElementById('beneficiario').textContent = getParam('beneficiario');
-    document.getElementById('cpf').textContent = getParam('cpf');
-    document.getElementById('codigo').textContent = Math.floor(100000000 + Math.random() * 900000000);
-    document.getElementById('autenticacao').textContent = Math.random().toString(36).substring(2, 12).toUpperCase();
-
-    // Data e hora
-    const now = new Date();
-    document.getElementById('data').textContent = now.toLocaleDateString('pt-BR');
-    document.getElementById('hora').textContent = now.toLocaleTimeString('pt-BR');
+    document.getElementById("codigo").innerText = gerarHash(20);
+    document.getElementById("autenticacao").innerText = gerarHash(32);
   </script>
 </body>
 </html>
+
